@@ -1,11 +1,39 @@
+.container {
+    display:flex;
+    justify-content: space-around;
+}
+
 body {
    display:flex;
    justify-content:center; 
-   margin: 10px, 0, 0,0;
+   margin: 15px, 0, 0,0;
+   background-color: #120610;
 }
 
 canvas {
-    border: 1px solid black;
+    border: 1.5px solid #C7525A;
 }
 
 
+
+#background {
+    margin:0px;
+    padding:30px;
+    height:400px;
+    background-color:#120610;
+}
+
+#controls {
+    padding:0px;
+    margin: 0 auto;
+    color:white;
+
+}
+
+#controls img {
+    height: 120px;
+}
+
+/* html, body  {
+    overflow: hidden;
+} */
