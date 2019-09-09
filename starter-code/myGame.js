@@ -4,11 +4,13 @@ var comets = [];
 var points = 0;
 var lives = [1, 2, 3];
 var blastArr = [];
-let imageX = (canvas.width / 2 - 30); 
-let imageY =(canvas.height / 2 - 50);
+var requestedId;
+let imageX = canvas.width / 2 - 30;
+let imageY = canvas.height / 2 - 50;
+
 setInterval(function() {
   points++;
-}, 1000);
+}, 2000);
 
 class Spaceship {
   constructor(x, y) {
@@ -25,7 +27,7 @@ let ship = new Spaceship(canvas.width / 2 - 30, canvas.height / 2 - 50);
 
 class Blast {
   constructor() {
-    this.counter = 10;
+    this.counter = 5;
     this.img = new Image();
     img.src = "../images/blast.png";
   }
@@ -56,53 +58,63 @@ class Comet {
     this.r = r;
     this.h = h;
     // this.random = Math.floor(Math.random() * 100 * Math.random() * 10);
-    this.radius = (this.w) / 2;
+    this.radius = this.w / 2;
     this.middle = this.w / 2;
   }
-  draw(index) {
+  draw() {
     ctx.beginPath();
-    ctx.fillStyle = "purple";
-    this.w = this.w + 0.7;
-    ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+    ctx.fillStyle = "yellow";
+    // this.w = this.w + 0.7;
+    ctx.arc(this.circleX, this.circleY, this.r, 0, 2 * Math.PI);
     ctx.fill();
 
     if (this.r >= 200) {
-    //   this.w = 0;
+      //   this.w = 0;
       console.log(this);
       //delete this;
       comets.shift();
     }
   }
-  
-  checkCollision(r){
 
-  if(
-    r === Math.floor( Math.sqrt( //top left corner 
-        (
-          (imageX-this.circleX)**2)+((imageY-this.circleY)**2))
-        ) 
-    ||
-    r === Math.floor( Math.sqrt( //top right corner
-        (
-          ((imageX+img.width)-this.circleX)**2)+((imageY-this.circleY)**2))
-        ) 
-    ||
-    r === Math.floor( Math.sqrt( //bottom right corner
-        (
-          ((imageX+img.width)-this.circleX)**2)+((imageY+img.height-this.circleY)**2))
+  checkCollision(r) {
+    if (
+      this.r ===
+        Math.floor(
+          Math.sqrt(
+            //top left corner
+            (imageX - this.circleX) ** 2 + (imageY - this.circleY) ** 2
+          )
+        ) ||
+      this.r ===
+        Math.floor(
+          Math.sqrt(
+            //top right corner
+            (imageX + img.width - this.circleX) ** 2 +
+              (imageY - this.circleY) ** 2
+          )
+        ) ||
+      this.r ===
+        Math.floor(
+          Math.sqrt(
+            //bottom right corner
+            (imageX + img.width - this.circleX) ** 2 +
+              (imageY + img.height - this.circleY) ** 2
+          )
+        ) ||
+      this.r ===
+        Math.floor(
+          Math.sqrt(
+            //bottom left corner
+            (imageX - this.circleX) ** 2 +
+              (imageY + img.height - this.circleY) ** 2
+          )
         )
-    ||
-    r === Math.floor( Math.sqrt( //bottom left corner
-        (
-          ((imageX)-this.circleX)**2)+((imageY+img.height-this.circleY)**2))
-        ) 
-
-  ){
-    alert('collision')
-    // window.cancelAnimationFrame(w)
-
+    ) {
+      points -= 5;
+      console.log("collision");
+      window.cancelAnimationFrame(animate)
+    }
   }
-}
 }
 
 // let comet = new Comet(canvas.width * Math.random(),
@@ -119,9 +131,6 @@ setInterval(function() {
   comets.push(comet);
 }, 3000);
 
-
-
-
 // function collision(ship, comet) {
 //        console.log()
 
@@ -137,7 +146,6 @@ setInterval(function() {
 //       }
 //     }
 //     console.log(comet.w)
-
 
 // addComet() {
 //     if(comets.length %= 100 ){
@@ -175,29 +183,29 @@ var background = {
   h: 0,
   moveUp: function() {
     this.y += 60;
-    comets.forEach(commet => {
-      commet.y += 60;
+    comets.forEach(comet => {
+      comet.circleY += 60;
     });
     //comet.y += 60
   },
   moveDown: function() {
     this.y -= 60;
-    comets.forEach(commet => {
-      commet.y -= 60;
+    comets.forEach(comet => {
+      comet.circleY -= 60;
     });
     //comet.y -= 60
   },
   moveLeft: function() {
     this.x += 60;
-    comets.forEach(commet => {
-      commet.x += 60;
+    comets.forEach(comet => {
+      comet.circleX += 60;
     });
     //comet.x += 60
   },
   moveRight: function() {
     this.x -= 60;
-    comets.forEach(commet => {
-      commet.x -= 60;
+    comets.forEach(comet => {
+      comet.circleX -= 60;
     });
     //comet.x -= 60
   },
@@ -261,15 +269,53 @@ class Map {
 }
 var map1 = new Map();
 
+function gameOver() {
+  if (points <= 0) {
+    console.log("Game Over");
+    points = 1;
+    ctx.fillStyle="orange"
+    ctx.fillRect(0,0,canvas.width,canvas.height)
+    ctx.fillStyle = "White";
+  ctx.font = "100px Georgia";
+  ctx.fillText("Game Over",140, 200);
+    window.cancelAnimationFrame(requestedId)
+    stop()
+
+  }
+}
+
+function start(){
+  if(!requestedId){
+    requestedId = window.requestAnimationFrame(animate)
+  }
+}
+
+start()
+
+function stop() {
+  if(requestedId){
+    window.cancelAnimationFrame(requestedId);
+    requestedId = undefined;
+  }
+}
+
+window.cancelAnimationFrame(animate)
+
+console.log(requestedId)
+Boolean(requestedId)
+
+
 function animate() {
+  requestedId= undefined;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   background.draw();
   comets.forEach(comet => {
-    comet.r++
-    comet.checkCollision(comet.r)
     comet.draw();
+    comet.r++;
+    comet.checkCollision(comet.r);
     // checkCollision(comet.r);
   });
+  gameOver();
   moveBlast();
   map1.draw();
   ship.draw();
@@ -277,13 +323,11 @@ function animate() {
   ctx.font = "30px Georgia";
   ctx.fillText("Score:", 600, 40);
   ctx.fillText(points, 700, 40);
-  //
+  //   
 
   // console.log(background)
 
+
   window.requestAnimationFrame(animate);
+
 }
-
-
-
-window.requestAnimationFrame(animate);
