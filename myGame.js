@@ -1,7 +1,7 @@
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 var comets = [];
-var points = 0;
+var points = 10;
 var lives = [1, 2, 3];
 var blastArr = [];
 var requestedId;
@@ -110,9 +110,25 @@ class Comet {
           )
         )
     ) {
-      points -= 5;
+      points = 0 ;
       console.log("collision");
       window.cancelAnimationFrame(animate)
+    }
+  }
+
+  checkRectCollision(){
+    var rect1 = {x: this.circleX, y: this.circleY, width: this.r*2, height: this.r*2}
+    //var rect2 = {x: (canvas.width / 2) - 30, y: (canvas.height / 2) - 50, width: 100, height: 100}
+    // canvas.width / 2 - 30, canvas.height / 2 - 50
+    var rect2 = {x: (canvas.width / 2) - 30, y: (canvas.height / 2) - 50, width: 100, height: 100}
+
+  if (rect1.x < rect2.x + rect2.width &&
+    rect1.x + rect1.width > rect2.x &&
+    rect1.y < rect2.y + rect2.height &&
+    rect1.y + rect1.height > rect2.y) {
+      console.log("Collision")
+      
+    // collision detected!
     }
   }
 }
@@ -269,8 +285,9 @@ class Map {
 }
 var map1 = new Map();
 
-function gameOver() {
+function gameOver(aFrame) {
   if (points <= 0) {
+    
     console.log("Game Over");
     points = 1;
     ctx.fillStyle="orange"
@@ -278,7 +295,7 @@ function gameOver() {
     ctx.fillStyle = "White";
   ctx.font = "100px Georgia";
   ctx.fillText("Game Over",140, 200);
-    window.cancelAnimationFrame(requestedId)
+    window.cancelAnimationFrame(aFrame)
     stop()
 
   }
@@ -305,17 +322,21 @@ console.log(requestedId)
 Boolean(requestedId)
 
 
+
 function animate() {
+  let aFrame = window.requestAnimationFrame(animate); 
   requestedId= undefined;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   background.draw();
   comets.forEach(comet => {
     comet.draw();
     comet.r++;
-    comet.checkCollision(comet.r);
-    // checkCollision(comet.r);
+    comet.checkRectCollision()
+    // comet.checkCollision(comet.r);
+     comet.checkRectCollision()
   });
-  gameOver();
+  //checkRectCollision()
+  gameOver(aFrame);
   moveBlast();
   map1.draw();
   ship.draw();
@@ -328,6 +349,5 @@ function animate() {
   // console.log(background)
 
 
-  window.requestAnimationFrame(animate);
 
 }
