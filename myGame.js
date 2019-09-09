@@ -35,10 +35,11 @@ class Blast {
     this.counter++;
   }
 }
-
 function shoot() {
   blastArr.push(new Blast());
   console.log(blastArr);
+  var bSound = document.getElementById("blast-sound");
+  bSound.play()
 }
 
 function moveBlast() {
@@ -62,11 +63,14 @@ class Comet {
     this.middle = this.w / 2;
   }
   draw() {
-    ctx.beginPath();
-    ctx.fillStyle = "yellow";
-    // this.w = this.w + 0.7;
-    ctx.arc(this.circleX, this.circleY, this.r, 0, 2 * Math.PI);
-    ctx.fill();
+    this.metorite = new Image()
+    this.metorite.src = "./resources/metorite.png"
+    ctx.drawImage(this.metorite, this.circleX, this.circleY)
+    // ctx.beginPath();
+    // ctx.fillStyle = "yellow";
+    // // this.w = this.w + 0.7;
+    // ctx.arc(this.circleX, this.circleY, this.r, 0, 2 * Math.PI);
+    // ctx.fill();
 
     if (this.r >= 200) {
       //   this.w = 0;
@@ -126,7 +130,10 @@ class Comet {
     rect1.x + rect1.width > rect2.x &&
     rect1.y < rect2.y + rect2.height &&
     rect1.y + rect1.height > rect2.y) {
+      points = 0 ;
       console.log("Collision")
+      window.cancelAnimationFrame(animate)
+
       
     // collision detected!
     }
@@ -297,14 +304,15 @@ function gameOver(aFrame) {
   ctx.fillText("Game Over",140, 200);
     window.cancelAnimationFrame(aFrame)
     stop()
-
   }
 }
 
+var song =  document.getElementById("gameSong")
+
+
 function start(){
-  if(!requestedId){
-    requestedId = window.requestAnimationFrame(animate)
-  }
+  song.play()
+  animate();
 }
 
 start()
@@ -318,7 +326,6 @@ function stop() {
 
 window.cancelAnimationFrame(animate)
 
-console.log(requestedId)
 Boolean(requestedId)
 
 
