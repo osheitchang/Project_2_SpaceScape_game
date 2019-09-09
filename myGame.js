@@ -18,7 +18,7 @@ class Spaceship {
   }
   draw() {
     var ship1 = new Image();
-    ship1.src = "../images/ship-03-inverted.png";
+    ship1.src = "../Resources/ship-03-inverted.png";
     ctx.drawImage(ship1, this.x, this.y, 100, 100);
   }
 }
@@ -29,7 +29,7 @@ class Blast {
   constructor() {
     this.counter = 5;
     this.img = new Image();
-    img.src = "../images/blast.png";
+    img.src = "../Resources/blast.png";
   }
   addCounter() {
     this.counter++;
@@ -172,7 +172,7 @@ img.onload = function() {
   }
 };
 
-img.src = "../Images/spaceBackground.png";
+img.src = "../Resources/spaceBackground.png";
 
 function moveComets() {}
 
@@ -261,7 +261,7 @@ class Map {
   }
   draw() {
     var img = new Image();
-    img.src = "../Images/spaceBackground-copy.png";
+    img.src = "../Resources/spaceBackground-copy.png";
     // ctx.drawImage(img,background.x+this.width-3,background.y, this.width,this.length )
     //
     // ctx.drawImage(img,background.x+this.width-3,background.y+this.length-3, this.width,this.length )
